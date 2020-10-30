@@ -28,7 +28,25 @@ authController.getToken = (req, res, next) => {
     });
 };
 
-authController.getData = (req, res, next) => {};
+authController.getData = (req, res, next) => {
+  const githubDataUrl = 'https://api.github.com/user';
+
+  fetch(githubDataUrl, {
+    method: 'GET',
+    headers: {
+      Authorization: `token ${res.locals.access_token}`,
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      return next();
+    })
+    .catch((error) => {
+      console.log('fetch error');
+      return next(error);
+    });
+};
 
 // export default authController;
 module.exports = authController;
